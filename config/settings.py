@@ -33,10 +33,14 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "fitup.harubuild.xyz",
+    "harubuild.xyz",
+    "www.harubuild.xyz",
 ]
 
 # CSRF 설정 (HTTPS 사용 시 필요)
 CSRF_TRUSTED_ORIGINS = [
+    "harubuild.xyz",
+    "www.harubuild.xyz",
     "https://fitup.harubuild.xyz",
 ]
 
