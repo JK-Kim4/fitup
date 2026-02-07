@@ -39,8 +39,8 @@ ALLOWED_HOSTS = [
 
 # CSRF 설정 (HTTPS 사용 시 필요)
 CSRF_TRUSTED_ORIGINS = [
-    "harubuild.xyz",
-    "www.harubuild.xyz",
+    "https://harubuild.xyz",
+    "https://www.harubuild.xyz",
     "https://fitup.harubuild.xyz",
 ]
 
