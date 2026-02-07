@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>핏업(Fitup) - 지원서의 '핏'을 올리는 가장 빠른 방법</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.2.0/github-markdown.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary-color: #10b981;
+            --accent-color: #f59e0b;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            margin-bottom: 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .logo-text {
+            color: white;
+        }
+
+        .logo-text h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text .tagline {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px 24px 0 0;
+            min-height: calc(100vh - 140px);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .card-header-custom h5 {
+            margin: 0;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-label {
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        textarea.form-control {
+            min-height: 180px;
+        }
+
+        /* File Upload Area */
+        .file-upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--secondary-color);
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            transform: scale(1.01);
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-text {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            background: var(--bg-gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            color: white;
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit:disabled {
+            background: #94a3b8;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Result Container */
+        .result-container {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .result-header h4 {
+            margin: 0;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-download {
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-download:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Markdown Body */
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 100%;
+            padding: 1rem 0;
+        }
+
+        .markdown-body table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .markdown-body th, .markdown-body td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+        }
+
+        .markdown-body th {
+            background: #f8fafc;
+        }
+
+        /* Alert */
+        .alert-danger {
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 4px solid #ef4444;
+        }
+
+        /* Footer */
+        .footer-inner {
+            text-align: center;
+            padding: 2rem 0 1rem;
+            margin-top: 3rem;
+            color: #64748b;
+            font-size: 0.875rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer-inner strong {
+            color: var(--primary-color);
+        }
+
+        .footer-inner p {
+            margin: 0.25rem 0;
+        }
+
+        .footer-inner .small {
+            color: #94a3b8;
+        }
+
+        /* Section Labels */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            color: var(--primary-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+        }
+
+        .loading.show {
+            display: inline-block;
+        }
+
+        /* Request Limit Badge */
+        .request-limit-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .request-limit-badge.exhausted {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+        }
+
+        .request-limit-badge.available {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo-text h1 {
+                font-size: 1.5rem;
+            }
+            .header {
+                padding: 1.5rem 0;
+            }
+            .main-container {
+                border-radius: 16px 16px 0 0;
+                padding: 1.5rem 1rem 2rem;
+            }
+            .card-header-custom {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">📊</div>
+                <div class="logo-text">
+                    <h1>핏업 <span style="font-size: 0.6em; font-weight: 400;">Fitup</span></h1>
+                    <p class="tagline">지원서의 '핏'을 올리는 가장 빠른 방법</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <strong>오류:</strong> {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <div class="card mb-4">
+            <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                    </svg>
+                    적합도 분석 설정
+                </h5>
+                <span class="request-limit-badge {% if remaining_requests == 0 %}exhausted{% elif remaining_requests <= 1 %}{% else %}available{% endif %}">
+                    🎫 오늘 남은 분석: <strong>{{ remaining_requests }}/{{ daily_limit }}회</strong>
+                </span>
+            </div>
+            <div class="card-body">
+                <form method="post" id="evaluationForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <span class="section-label">🤖 AI 모델</span>
+                        <label for="id_provider" class="form-label">{{ form.provider.label }}</label>
+                        {{ form.provider }}
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="section-label">📋 채용 정보</span>
+                        <label for="id_jd" class="form-label">{{ form.jd.label }}</label>
+                        {{ form.jd }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <span class="section-label">📄 필수 서류</span>
+                            <label for="id_resume" class="form-label">{{ form.resume.label }} <span class="text-danger">*</span></label>
+                            <div class="file-upload-area" id="resumeDropArea">
+                                <div class="file-upload-icon">📎</div>
+                                {{ form.resume }}
+                                <p class="form-text mt-2 mb-0">{{ form.resume.help_text }}</p>
+                            </div>
+                            {% if form.resume.errors %}
+                            <div class="text-danger mt-2 small">{{ form.resume.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <span class="section-label">📑 추가 서류</span>
+                            <label for="id_career_description" class="form-label">{{ form.career_description.label }}</label>
+                            <div class="file-upload-area" id="careerDropArea">
+                                <div class="file-upload-icon">📎</div>
+                                {{ form.career_description }}
+                                <p class="form-text mt-2 mb-0">{{ form.career_description.help_text }}</p>
+                            </div>
+                            {% if form.career_description.errors %}
+                            <div class="text-danger mt-2 small">{{ form.career_description.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        {% if remaining_requests > 0 %}
+                        <button type="submit" class="btn btn-submit" id="submitBtn">
+                            <span class="spinner-border spinner-border-sm me-2 loading" role="status"></span>
+                            🚀 적합도 분석하기
+                        </button>
+                        {% else %}
+                        <button type="button" class="btn btn-submit" disabled style="background: #94a3b8; cursor: not-allowed;">
+                            ⛔ 오늘의 분석 한도를 모두 사용했습니다
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="result-container">
+            <div class="result-header">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#10b981" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </svg>
+                    분석 결과
+                </h4>
+                <button type="button" class="btn btn-download" id="downloadBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                    </svg>
+                    다운로드 (.md)
+                </button>
+            </div>
+            <div class="markdown-body" id="resultContent">
+                {{ result|linebreaks }}
+            </div>
+            <script type="text/template" id="rawMarkdown">{{ result }}</script>
+        </div>
+        {% endif %}
+
+        <!-- Footer inside main for white bg -->
+        <footer class="footer-inner">
+            <p>© 2025 <strong>핏업(Fitup)</strong></p>
+            <p class="small">AI 기반 이력서-채용공고 적합도 분석 서비스</p>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // 폼 제출 시 로딩 표시
+        document.getElementById('evaluationForm').addEventListener('submit', function() {
+            document.querySelector('.loading').classList.add('show');
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2" role="status"></span>분석 중... 잠시만 기다려주세요';
+        });
+
+        // 드래그 앤 드롭 지원
+        function setupDropArea(dropAreaId, inputId) {
+            const dropArea = document.getElementById(dropAreaId);
+            const input = document.getElementById(inputId);
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'), false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'), false);
+            });
+
+            dropArea.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    input.files = files;
+                    // 파일명 표시
+                    const fileName = files[0].name;
+                    dropArea.querySelector('.file-upload-icon').textContent = '✅';
+                    dropArea.querySelector('.form-text').textContent = fileName;
+                }
+            }, false);
+
+            // 파일 선택 시 아이콘 변경
+            input.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    dropArea.querySelector('.file-upload-icon').textContent = '✅';
+                    dropArea.querySelector('.form-text').textContent = this.files[0].name;
+                }
+            });
+        }
+
+        setupDropArea('resumeDropArea', 'id_resume');
+        setupDropArea('careerDropArea', 'id_career_description');
+
+        // 마크다운 렌더링
+        const resultContent = document.getElementById('resultContent');
+        if (resultContent) {
+            const rawText = resultContent.innerText;
+            resultContent.innerHTML = marked.parse(rawText);
+        }
+
+        // 마크다운 다운로드
+        const downloadBtn = document.getElementById('downloadBtn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', function() {
+                const rawMarkdown = document.getElementById('rawMarkdown').textContent;
+                const blob = new Blob([rawMarkdown], { type: 'text/markdown;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const now = new Date();
+                const timestamp = now.toISOString().slice(0, 10);
+                a.href = url;
+                a.download = `fitup-result-${timestamp}.md`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+    </script>
+</body>
+</html>
