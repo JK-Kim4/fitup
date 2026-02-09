@@ -12,6 +12,7 @@ class EvaluationForm(forms.Form):
     ]
 
     ALLOWED_EXTENSIONS = ['.pdf', '.md', '.markdown', '.txt']
+    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
     provider = forms.ChoiceField(
         choices=PROVIDER_CHOICES,
@@ -52,20 +53,25 @@ class EvaluationForm(forms.Form):
         """Validate resume file."""
         resume = self.cleaned_data.get('resume')
         if resume:
-            self._validate_file_extension(resume, '이력서')
+            self._validate_file(resume, '이력서')
         return resume
 
     def clean_career_description(self):
         """Validate career description file."""
         career_desc = self.cleaned_data.get('career_description')
         if career_desc:
-            self._validate_file_extension(career_desc, '경력기술서')
+            self._validate_file(career_desc, '경력기술서')
         return career_desc
 
-    def _validate_file_extension(self, file, field_name):
-        """Check if file has allowed extension."""
+    def _validate_file(self, file, field_name):
+        """Check file extension and size."""
         filename = file.name.lower()
         if not any(filename.endswith(ext) for ext in self.ALLOWED_EXTENSIONS):
             raise forms.ValidationError(
                 f"{field_name}는 PDF, Markdown, TXT 파일만 업로드 가능합니다."
+            )
+        if file.size > self.MAX_FILE_SIZE:
+            max_mb = self.MAX_FILE_SIZE // (1024 * 1024)
+            raise forms.ValidationError(
+                f"{field_name} 파일 크기가 {max_mb}MB를 초과합니다."
             )
