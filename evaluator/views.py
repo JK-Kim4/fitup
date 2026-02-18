@@ -9,7 +9,7 @@ from django.views import View
 
 from .forms import EvaluationForm
 from .file_parser import parse_file
-from .models import RequestLog
+from .models import AnalysisHistory, RequestLog
 
 # 프로젝트 루트 디렉토리
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,9 +18,6 @@ PROMPT_PATH = BASE_DIR / "prompt" / "prompt.md"
 # llm_client 모듈을 임포트할 수 있도록 경로 추가
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
-
-# 일일 요청 제한
-DAILY_REQUEST_LIMIT = 3
 
 
 def get_client_ip(request) -> str:
@@ -66,10 +63,12 @@ class EvaluationView(View):
     def get_context_data(self, request, **kwargs):
         """공통 컨텍스트 데이터를 반환합니다."""
         ip_address = get_client_ip(request)
-        remaining = RequestLog.get_remaining_requests(ip_address, DAILY_REQUEST_LIMIT)
+        user = request.user
+        remaining = RequestLog.get_remaining_requests(ip_address, user)
+        daily_limit = RequestLog.get_daily_limit(user)
         return {
             "remaining_requests": remaining,
-            "daily_limit": DAILY_REQUEST_LIMIT,
+            "daily_limit": daily_limit,
             **kwargs,
         }
 
@@ -82,14 +81,16 @@ class EvaluationView(View):
     def post(self, request):
         """Process the evaluation request."""
         ip_address = get_client_ip(request)
+        user = request.user
 
         # 요청 제한 확인
-        if not RequestLog.can_make_request(ip_address, DAILY_REQUEST_LIMIT):
+        if not RequestLog.can_make_request(ip_address, user):
+            daily_limit = RequestLog.get_daily_limit(user)
             form = EvaluationForm()
             context = self.get_context_data(
                 request,
                 form=form,
-                error="오늘의 분석 요청 한도(3회)를 초과했습니다. 내일 다시 이용해주세요.",
+                error=f"오늘의 분석 요청 한도({daily_limit}회)를 초과했습니다. 내일 다시 이용해주세요.",
             )
             return render(request, self.template_name, context)
 
@@ -142,8 +143,14 @@ class EvaluationView(View):
             client = get_client(provider)
             result = client.generate(system_prompt, user_message)
 
-            # 성공 시 요청 기록
-            RequestLog.log_request(ip_address)
+            # 성공 시 요청 기록 + 분석 이력 저장
+            RequestLog.log_request(ip_address, user)
+            AnalysisHistory.objects.create(
+                ip_address=ip_address,
+                user=user if user.is_authenticated else None,
+                provider=provider,
+                resume_filename=resume_file.name,
+            )
 
             context = self.get_context_data(
                 request,
